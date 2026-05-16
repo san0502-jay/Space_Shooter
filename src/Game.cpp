@@ -261,13 +261,6 @@ void Game::Draw() {
 
     }
 
-    DrawText(
-    TextFormat("Invuln: %.2f", invulnerabilityTimer),
-    20,
-    80,
-    20,
-    WHITE
-);
 
 }
 
