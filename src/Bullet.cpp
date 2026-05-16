@@ -1,14 +1,13 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(Vector2 startposition) {
-    position = startposition;
+Bullet::Bullet(Vector2 startPosition, Texture2D* texture) {
+    position = startPosition;
 
     speed = 500.0f;
 
     active = true;
-    bulletTexture = LoadTexture("Assets/bullet.png");
-
+    bulletTexture = texture;
 }
 
 void Bullet::Update() {
@@ -24,9 +23,9 @@ void Bullet::Update() {
 void Bullet::Draw() {
     if (active) {
         DrawTexture(
-     bulletTexture,
-     position.x - bulletTexture.width / 2,
-     position.y - bulletTexture.height / 2,
+     *bulletTexture,
+     position.x - bulletTexture->width / 2,
+     position.y - bulletTexture->height / 2,
      WHITE
  );
     }
@@ -37,9 +36,9 @@ Rectangle Bullet::GetRect()
 {
     return
     {
-        position.x - bulletTexture.width / 2,
-        position.y - bulletTexture.height / 2,
-        (float)bulletTexture.width,
-        (float)bulletTexture.height
+        position.x - bulletTexture->width / 2,
+        position.y - bulletTexture->height / 2,
+        (float)bulletTexture->width,
+        (float)bulletTexture->height
     };
 }

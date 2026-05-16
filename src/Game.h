@@ -4,14 +4,15 @@
 #include <vector>
 #include "Bullet.h"
 #include "Enemy.h"
+#include "constants.h"
 
 enum class GameState {
-    playing,
-    paused,
+    Playing,
+    Paused,
     GameOver,
 };
 
-struct particle {
+struct Particle {
     Vector2 position;
 
     Vector2 velocity;
@@ -21,7 +22,7 @@ struct particle {
     float radius;
 };
 
-struct star {
+struct Star {
     Vector2 position;
 
     float speed;
@@ -33,28 +34,41 @@ struct star {
 class Game {
     public:
 
-    Player player;
-
-
-
-
-    Texture2D explosionTexture;
-
+    GameState currentGameState = GameState::Playing;
 
     Game();
-    GameState currentGameState = GameState::playing;
+    ~Game();
 
     void Update();
-
     void Draw();
-
     void Reset();
+    void HandleInput(bool& shouldExit);
 
-    void SpawnExplosion(Vector2 position);
+private:
+
+    Player player;
+
+    Texture2D enemyTexture;
+    Texture2D bulletTexture;
 
     std::vector<Bullet> bullets;
     std::vector<Enemy> enemies;
-    std::vector<star> stars;
-    std::vector<particle> particles;
+    std::vector<Star> stars;
+    std::vector<Particle> particles;
+
+    Rectangle RestartButton;
+    Rectangle PauseButton;
+    Rectangle ResumeButton;
+    Rectangle ExitButton;
+
+
+    float EnemySpawnTimer;
+    float EnemySpawnInterval;
+    float ShootCooldown;
+    float ShootInterval;
+    float DifficultTimer;
+    int score;
+
+    void SpawnExplosion(Vector2 position);
 
 };

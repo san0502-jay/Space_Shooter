@@ -6,13 +6,14 @@ class Player {
 
     public:
     Texture2D playerTexture;
-    Rectangle GetRect();
 
     Vector2 position;
 
     float speed;
 
     float radius;
+
+    Rectangle GetRect();
 
     Player();
 

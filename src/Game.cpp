@@ -1,85 +1,112 @@
 #include "game.h"
 #include<algorithm>
 
-
-float enemySpawnTimer;
-float enemySpawnInterval;
-float shootcooldown;
-float shootinterval;
-float difficulttimer;
-int score;
-
-
-
-
 Game::Game() {
 
-    enemySpawnTimer = 0.0f;
-    enemySpawnInterval = 1.3f;
-    shootcooldown =0.0f;
-    shootinterval = 0.25f;
-    difficulttimer = 0.0f;
+   enemyTexture= LoadTexture("Assets/enemy_space.png");
+    bulletTexture= LoadTexture("Assets/bullet.png");
+
+    RestartButton = { 300, 300, 200, 60 };
+    PauseButton   = { 700,  10,  80, 40 };
+    ResumeButton  = { 300, 300, 200, 60 };
+    ExitButton    = { 300, 400, 200, 60 };
+
+
+    EnemySpawnTimer = 0.0f;
+    EnemySpawnInterval = 1.3f;
+    ShootCooldown =0.0f;
+    ShootInterval = 0.25f;
+    DifficultTimer = 0.0f;
     score = 0;
-
-
-    explosionTexture = LoadTexture("Assets/03.png");
 
     for (int i = 0; i < 100; i++)
     {
-        star star;
+        Star star;
 
         star.position =
         {
-            (float)GetRandomValue(0, 800),
-            (float)GetRandomValue(0, 600)
+            (float)GetRandomValue(0, SCREEN_W),
+            (float)GetRandomValue(0, SCREEN_H)
         };
 
         star.speed = (float)GetRandomValue(50, 200);
-
         star.size = (float)GetRandomValue(1, 3);
-
         stars.push_back(star);
     }
 }
 
+Game::~Game() {
+    UnloadTexture(enemyTexture);
+    UnloadTexture(bulletTexture);
+}
+
+void Game::HandleInput(bool& shouldExit) {
+    Vector2 mouse = GetMousePosition();
+    bool clicked  = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+
+    if (currentGameState == GameState:: GameOver) {
+        if (clicked && CheckCollisionPointRec(mouse, RestartButton)) {
+            Reset();
+        }
+    }
+
+    if (currentGameState == GameState:: Playing) {
+        if (clicked && CheckCollisionPointRec(mouse, PauseButton)) {
+            currentGameState = GameState:: Paused;
+        }
+    }
+    if (currentGameState == GameState::Paused) {
+        if (clicked && CheckCollisionPointRec(mouse, ResumeButton))
+            currentGameState = GameState::Playing;
+    }
+
+    if (currentGameState == GameState::Paused ||
+        currentGameState == GameState::GameOver) {
+        if (clicked && CheckCollisionPointRec(mouse, ExitButton))
+            shouldExit = true;
+        }
+
+}
+
 void Game::Update() {
+
     player.Update();
-    enemySpawnTimer += GetFrameTime();
-    shootcooldown += GetFrameTime();
-    difficulttimer += GetFrameTime();
 
-    for (star& star : stars) {
+    EnemySpawnTimer += GetFrameTime();
+    ShootCooldown += GetFrameTime();
+    DifficultTimer += GetFrameTime();
+
+    for (Star& star : stars) {
         star.position.y += star.speed * GetFrameTime();
-        if (star.position.y>600) {
+        if (star.position.y>SCREEN_H) {
             star.position.y = 0;
-            star.position.x = (float)GetRandomValue(0, 800);
+            star.position.x = (float)GetRandomValue(0, SCREEN_W);
         }
     }
 
-    if (difficulttimer >= 5.0f)
+    if (DifficultTimer >= 5.0f)
     {
-        if (enemySpawnInterval > 0.3f)
+        if (EnemySpawnInterval > 0.3f)
         {
-            enemySpawnInterval -= 0.02f;
+            EnemySpawnInterval -= 0.02f;
         }
 
-        difficulttimer = 0.0f;
+        DifficultTimer = 0.0f;
     }
 
-    if (enemySpawnTimer >= enemySpawnInterval) {
+    if (EnemySpawnTimer >= EnemySpawnInterval) {
         float randomx = GetRandomValue(50.0f,750.0f);
 
-        enemies.push_back(Enemy({randomx,-20}));
-
-        enemySpawnTimer = 0.0f;
+        enemies.push_back(Enemy({randomx,-20},&enemyTexture));
+        EnemySpawnTimer = 0.0f;
     }
 
     if(IsKeyPressed(KEY_SPACE)) {
-        if (shootcooldown >= shootinterval)
+        if (ShootCooldown >= ShootInterval)
         {
 
-            bullets.push_back(Bullet(player.position));
-            shootcooldown = 0;
+            bullets.push_back(Bullet(player.position, &bulletTexture));
+            ShootCooldown = 0;
         }
 
     }
@@ -93,38 +120,35 @@ void Game::Update() {
             enemy.Update();
         }
     }
-    for (particle& particle : particles)
+    for (Particle& particle : particles)
     {
         particle.position.x += particle.velocity.x * GetFrameTime();
-
         particle.position.y += particle.velocity.y * GetFrameTime();
-
         particle.life -= GetFrameTime();
     }
+
     for (Bullet& bullet : bullets) {
         for (Enemy& enemy : enemies) {
             if (bullet.active && enemy.active) {
                 if (CheckCollisionRecs(
-         bullet.GetRect(),
-         enemy.GetRect())) {
-                    bullet.active = false;
+                     bullet.GetRect(),
+                      enemy.GetRect())) {
 
-                    enemy.active = false;
-                    SpawnExplosion(enemy.position);
-                    score += 10;
+                        bullet.active = false;
+                        enemy.active = false;
+                        SpawnExplosion(enemy.position);
+                        score += 10;
                   }
             }
         }
     }
-
+auto isDead = [](auto& x) { return !x.active; };
 
     bullets.erase(
         std::remove_if(
             bullets.begin(),
             bullets.end(),
-            [](Bullet& bullet ) {
-                return !bullet.active;
-            }),
+            isDead),
             bullets.end()
             );
 
@@ -133,16 +157,14 @@ void Game::Update() {
         std::remove_if(
             enemies.begin(),
             enemies.end(),
-            [](Enemy& enemy) {
-                return !enemy.active;
-            }),
+            isDead),
             enemies.end());
 
     particles.erase(
         std::remove_if(
             particles.begin(),
             particles.end(),
-            [](particle& particle) {
+            [](Particle& particle) {
                 return particle.life<=0.0f;
             }),
             particles.end()
@@ -159,12 +181,9 @@ void Game::Update() {
 }
 
 
-
-
-
 void Game::Draw() {
 
-    for (star& star : stars)
+    for (Star& star : stars)
     {
         DrawCircleV(
             star.position,
@@ -183,7 +202,7 @@ void Game::Draw() {
             enemy.Draw();
         }
     }
-    for (particle& particle : particles)
+    for (Particle& particle : particles)
     {
         DrawCircleV(
         particle.position,
@@ -191,9 +210,32 @@ void Game::Draw() {
         ORANGE
     );
     }
+
     player.Draw();
 
     DrawText(TextFormat("Score: %i ",score), 20,20,30,WHITE);
+
+    if (currentGameState == GameState::Playing) {
+        DrawRectangleRec(PauseButton,GRAY);
+        DrawText("PAUSE",710,20, 18,WHITE);
+    }
+    if (currentGameState == GameState::Paused) {
+        DrawRectangle(0,0,800,600,Fade(BLACK,0.7f));
+        DrawText("PAUSED",300,250,50,WHITE);
+        DrawRectangleRec(ResumeButton,GREEN);
+        DrawText("RESUME",350,320, 25,WHITE);
+        DrawRectangleRec(ExitButton,RED);
+        DrawText("EXIT",370,420, 25,WHITE);
+    }
+    if (currentGameState == GameState::GameOver) {
+        DrawText("GAME OVER ", 280, 250, 40, RED);
+        DrawRectangleRec(RestartButton, RED);
+        DrawText("RESTART",340,320, 25,WHITE);
+        DrawRectangleRec(ExitButton,RED);
+        DrawText("EXIT",370,420, 25,WHITE);
+
+    }
+
 }
 
 
@@ -207,9 +249,13 @@ void Game::Reset()
 
     score = 0;
 
-    enemySpawnTimer = 0.0f;
+    EnemySpawnTimer = 0.0f;
 
-    currentGameState = GameState::playing;
+    EnemySpawnInterval =1.3F;
+
+    DifficultTimer = 0.0f;
+
+    currentGameState = GameState::Playing;
 }
 
 
@@ -217,7 +263,7 @@ void Game::SpawnExplosion(Vector2 position) {
 for ( int i = 0; i < 20; i++)
     {
 
-    particle particle;
+    Particle particle;
 
     particle.position = position;
 
@@ -229,6 +275,5 @@ for ( int i = 0; i < 20; i++)
 
     particles.push_back(particle);
 
-
-}
+    }
 }

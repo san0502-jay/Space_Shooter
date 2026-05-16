@@ -20,7 +20,8 @@ add_executable(Space_Shooter src/main.cpp
         src/Bullet.h
         src/Bullet.cpp
         src/Enemy.h
-        src/Enemy.cpp)
+        src/Enemy.cpp
+        src/Constants.h)
 
 target_link_libraries(Space_Shooter PRIVATE raylib)
 

@@ -1,6 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy(Vector2 startPosition) {
+Enemy::Enemy(Vector2 startPosition, Texture2D* texture) {
+
     position = startPosition;
 
     speed = 100.0f;
@@ -8,7 +9,9 @@ Enemy::Enemy(Vector2 startPosition) {
     radius = 55.0f;
 
     active = true;
-    enemyTexture = LoadTexture("Assets/enemy_space.png");
+
+    Enmeytexture = texture;
+
 
 }
 
@@ -28,8 +31,8 @@ void Enemy::Draw() {
     {
         0,
         0,
-        (float)enemyTexture.width,
-        (float)enemyTexture.height
+        (float)Enmeytexture->width,
+        (float)Enmeytexture->height
     };
 
     Rectangle destination =
@@ -47,7 +50,7 @@ void Enemy::Draw() {
     };
 
     DrawTexturePro(
-        enemyTexture,
+        *Enmeytexture,
         source,
         destination,
         origin,
@@ -55,7 +58,6 @@ void Enemy::Draw() {
         WHITE
     );
 
-    DrawRectangleLinesEx(GetRect(), 2, RED);
 }
 
 

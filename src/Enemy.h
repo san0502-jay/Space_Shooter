@@ -13,11 +13,11 @@ class Enemy {
 
     bool active;
 
-    Texture2D enemyTexture;
+    Texture2D* Enmeytexture;
 
     Rectangle GetRect();
 
-    Enemy(Vector2 startPosition);
+    Enemy(Vector2 startPosition,Texture2D* texture);
 
     void Update();
 

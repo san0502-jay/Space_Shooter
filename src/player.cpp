@@ -1,4 +1,5 @@
 #include "player.h"
+#include "Constants.h"
 
 Player::Player() {
 
@@ -26,11 +27,11 @@ void Player::Update() {
 
     if (position.x < radius) position.x = radius;
 
-    if (position.x > 800 - radius ) position.x = 800 - radius;
+    if (position.x > SCREEN_W- radius ) position.x = SCREEN_W - radius;
 
     if (position.y < radius) position.y = radius;
 
-    if (position.y > 600 - radius ) position.y = 600 - radius;
+    if (position.y > SCREEN_H - radius ) position.y = SCREEN_H - radius;
 
 
 
@@ -70,7 +71,6 @@ void Player::Draw() {
         WHITE
     );
 
-    DrawRectangleLinesEx(GetRect(), 2, RED);
 }
 
 Rectangle Player::GetRect()

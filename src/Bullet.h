@@ -10,11 +10,11 @@ class Bullet {
 
     bool active;
 
-    Bullet(Vector2 startposition);
+    Texture2D* bulletTexture;
 
-    Texture2D bulletTexture;
-    
     Rectangle GetRect();
+
+    Bullet(Vector2 startPosition,Texture2D* texture);
 
     void Update();
 
