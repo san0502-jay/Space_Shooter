@@ -68,6 +68,8 @@ private:
     float ShootInterval;
     float DifficultTimer;
     int score;
+    int lives;
+    float invulnerabilityTimer;
 
     void SpawnExplosion(Vector2 position);
 

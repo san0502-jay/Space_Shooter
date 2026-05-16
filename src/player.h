@@ -19,5 +19,5 @@ class Player {
 
     void  Update();
 
-    void  Draw();
+    void Draw(bool isInvulnerable);
 };

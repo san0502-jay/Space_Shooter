@@ -37,7 +37,15 @@ void Player::Update() {
 
 }
 
-void Player::Draw() {
+void Player::Draw(bool isInvulnerable) {
+
+    Color tint = WHITE;
+
+    if (isInvulnerable &&
+        ((int)(GetTime() * 10) % 2 == 0))
+    {
+        tint = GRAY;
+    }
 
 
     Rectangle source =
@@ -68,7 +76,7 @@ void Player::Draw() {
         destination,
         origin,
         0.0f,
-        WHITE
+        tint
     );
 
 }

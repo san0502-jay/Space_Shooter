@@ -18,6 +18,8 @@ Game::Game() {
     ShootInterval = 0.25f;
     DifficultTimer = 0.0f;
     score = 0;
+    lives = 3;
+    invulnerabilityTimer = 0;
 
     for (int i = 0; i < 100; i++)
     {
@@ -75,6 +77,14 @@ void Game::Update() {
     EnemySpawnTimer += GetFrameTime();
     ShootCooldown += GetFrameTime();
     DifficultTimer += GetFrameTime();
+    if (invulnerabilityTimer > 0)
+    {
+        invulnerabilityTimer -= GetFrameTime();
+        if (invulnerabilityTimer < 0)
+        {
+            invulnerabilityTimer = 0;
+        }
+    }
 
     for (Star& star : stars) {
         star.position.y += star.speed * GetFrameTime();
@@ -171,12 +181,26 @@ auto isDead = [](auto& x) { return !x.active; };
 );
 
 
-    for (Enemy& enemy : enemies) {
+    for (Enemy& enemy : enemies)
+    {
         if (CheckCollisionRecs(
-         player.GetRect(),
-         enemy.GetRect())) {
-            currentGameState = GameState:: GameOver;
-              }
+                player.GetRect(),
+                enemy.GetRect()) &&
+            invulnerabilityTimer <= 0)
+        {
+            lives--;
+
+            invulnerabilityTimer = 1.0f;
+
+            enemy.active = false;
+
+            if (lives <= 0)
+            {
+                currentGameState = GameState::GameOver;
+            }
+
+            break;
+        }
     }
 }
 
@@ -211,16 +235,17 @@ void Game::Draw() {
     );
     }
 
-    player.Draw();
+    player.Draw(currentGameState == GameState::Playing && invulnerabilityTimer > 0);
 
     DrawText(TextFormat("Score: %i ",score), 20,20,30,WHITE);
+    DrawText(TextFormat("Lives: %i", lives),20,50,30,WHITE);
 
     if (currentGameState == GameState::Playing) {
         DrawRectangleRec(PauseButton,GRAY);
         DrawText("PAUSE",710,20, 18,WHITE);
     }
     if (currentGameState == GameState::Paused) {
-        DrawRectangle(0,0,800,600,Fade(BLACK,0.7f));
+        DrawRectangle(0,0,SCREEN_W,SCREEN_H,Fade(BLACK,0.7f));
         DrawText("PAUSED",300,250,50,WHITE);
         DrawRectangleRec(ResumeButton,GREEN);
         DrawText("RESUME",350,320, 25,WHITE);
@@ -236,6 +261,14 @@ void Game::Draw() {
 
     }
 
+    DrawText(
+    TextFormat("Invuln: %.2f", invulnerabilityTimer),
+    20,
+    80,
+    20,
+    WHITE
+);
+
 }
 
 
@@ -248,6 +281,8 @@ void Game::Reset()
     enemies.clear();
 
     score = 0;
+
+    lives = 3;
 
     EnemySpawnTimer = 0.0f;
 
