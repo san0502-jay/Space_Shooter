@@ -7,6 +7,7 @@ Bullet::Bullet(Vector2 startposition) {
     speed = 500.0f;
 
     active = true;
+    bulletTexture = LoadTexture("Assets/bullet.png");
 
 }
 
@@ -22,7 +23,23 @@ void Bullet::Update() {
 
 void Bullet::Draw() {
     if (active) {
-        DrawCircleV(position,5,RED);
+        DrawTexture(
+     bulletTexture,
+     position.x - bulletTexture.width / 2,
+     position.y - bulletTexture.height / 2,
+     WHITE
+ );
     }
 }
 
+
+Rectangle Bullet::GetRect()
+{
+    return
+    {
+        position.x - bulletTexture.width / 2,
+        position.y - bulletTexture.height / 2,
+        (float)bulletTexture.width,
+        (float)bulletTexture.height
+    };
+}

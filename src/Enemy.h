@@ -13,6 +13,10 @@ class Enemy {
 
     bool active;
 
+    Texture2D enemyTexture;
+
+    Rectangle GetRect();
+
     Enemy(Vector2 startPosition);
 
     void Update();

@@ -67,7 +67,7 @@ int main()
 
         BeginDrawing();
 
-        ClearBackground(WHITE);
+        ClearBackground(BLACK);
 
         game.Draw();
 

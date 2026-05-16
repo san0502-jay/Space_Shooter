@@ -5,9 +5,10 @@ Enemy::Enemy(Vector2 startPosition) {
 
     speed = 100.0f;
 
-    radius = 20.0f;
+    radius = 55.0f;
 
     active = true;
+    enemyTexture = LoadTexture("Assets/enemy_space.png");
 
 }
 
@@ -22,5 +23,49 @@ void Enemy::Update() {
 }
 
 void Enemy::Draw() {
-    DrawCircleV(position,radius,RED);
+
+    Rectangle source =
+    {
+        0,
+        0,
+        (float)enemyTexture.width,
+        (float)enemyTexture.height
+    };
+
+    Rectangle destination =
+    {
+        position.x,
+        position.y,
+        80,
+        80
+    };
+
+    Vector2 origin =
+    {
+        40,
+        40
+    };
+
+    DrawTexturePro(
+        enemyTexture,
+        source,
+        destination,
+        origin,
+        0.0f,
+        WHITE
+    );
+
+    DrawRectangleLinesEx(GetRect(), 2, RED);
+}
+
+
+Rectangle Enemy::GetRect()
+{
+    return
+    {
+        position.x - 30,
+        position.y - 30,
+        62,
+        62
+    };
 }

@@ -5,6 +5,8 @@
 class Player {
 
     public:
+    Texture2D playerTexture;
+    Rectangle GetRect();
 
     Vector2 position;
 

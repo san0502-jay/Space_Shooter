@@ -12,6 +12,10 @@ class Bullet {
 
     Bullet(Vector2 startposition);
 
+    Texture2D bulletTexture;
+    
+    Rectangle GetRect();
+
     void Update();
 
     void Draw();

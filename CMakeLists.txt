@@ -23,3 +23,5 @@ add_executable(Space_Shooter src/main.cpp
         src/Enemy.cpp)
 
 target_link_libraries(Space_Shooter PRIVATE raylib)
+
+file(COPY Assets DESTINATION ${CMAKE_BINARY_DIR})
