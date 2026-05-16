@@ -24,5 +24,6 @@ add_executable(Space_Shooter src/main.cpp
         src/Constants.h)
 
 target_link_libraries(Space_Shooter PRIVATE raylib)
+target_link_options(Space_Shooter PRIVATE -static-libgcc -static-libstdc++ -static)
 
 file(COPY Assets DESTINATION ${CMAKE_BINARY_DIR})
