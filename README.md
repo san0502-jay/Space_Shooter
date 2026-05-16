@@ -1,19 +1,27 @@
 # Space Shooter
 
-A simple 2D space shooter game built using C++ and raylib.
+A 2D arcade-style space shooter built in C++ using raylib.
+
+The project focuses on clean game architecture, resource management, collision systems, and real-time gameplay programming.
+
+---
 
 ## Features
 
 - Smooth player movement
-- Delta-time based movement system
+- Delta-time based movement
 - Bullet shooting system
 - Enemy spawning system
-- Enemy collision detection
-- Score system
+- Collision detection system
+- Score tracking
+- Lives and invulnerability system
 - Game over system
-- Pause and resume system
 - Entity cleanup system
+- Centralized texture management
 - Multi-file game architecture
+- State-based game flow system
+
+---
 
 ## Controls
 
@@ -24,7 +32,10 @@ A simple 2D space shooter game built using C++ and raylib.
 | A / ← | Move Left |
 | D / → | Move Right |
 | SPACE | Shoot |
+| ESC | Exit Game |
 | Mouse Left Click | UI Buttons |
+
+---
 
 ## Technologies Used
 
@@ -33,22 +44,54 @@ A simple 2D space shooter game built using C++ and raylib.
 - CMake
 - CLion
 
-## Concepts Learned
+---
 
-This project helped practice:
+## Concepts Practiced
+
+This project was built to practice core game programming concepts including:
 
 - Game loops
-- Delta time movement
-- Entity systems
+- Delta-time movement
 - Collision detection
-- Object-oriented programming
-- Dynamic object spawning
 - State machines
-- Rendering order
-- Entity lifecycle management
-- Multi-file architecture
+- Object-oriented programming
+- Entity systems
+- Dynamic spawning systems
+- Resource management
+- Texture lifetime management
+- Real-time gameplay systems
+- Rendering pipelines
+- Multi-file project architecture
+
+---
+
+## Architecture Improvements
+
+Recent refactors included:
+
+- Fixed texture memory leaks by sharing textures across entities
+- Removed global game state variables
+- Moved gameplay logic out of `main.cpp`
+- Added centralized constants system
+- Standardized naming conventions
+- Removed debug rendering from release build
+- Added player lives and temporary damage invulnerability
+
+---
 
 
+## Future Improvements
+
+Planned upgrades:
+
+- Particle effects
+- Audio system
+- Enemy wave patterns
+- High score saving
+- Animation system
+- Object pooling
+- Better UI transitions
+- Power-ups
 ## Build Instructions
 
 ```bash
