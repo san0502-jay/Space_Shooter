@@ -6,6 +6,16 @@ The project focuses on clean game architecture, resource management, collision s
 
 ---
 
+## Download & Play
+
+> Windows only
+
+[![Download](https://img.shields.io/badge/Download-Play%20Now-blue)](https://github.com/san0502-jay/Space_Shooter/releases/latest/download/Space_Shooter.zip)
+
+> If Windows shows a security warning, click **"More info"** → **"Run anyway"**. This is normal for unsigned executables.
+
+---
+
 ## Features
 
 - Smooth player movement
