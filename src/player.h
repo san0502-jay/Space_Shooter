@@ -5,7 +5,6 @@
 class Player {
 
     public:
-    Texture2D playerTexture;
 
     Vector2 position;
 
@@ -16,8 +15,15 @@ class Player {
     Rectangle GetRect();
 
     Player();
+    ~Player();
 
     void  Update();
 
+    void Reset();
+
     void Draw(bool isInvulnerable);
+
+    private:
+
+    Texture2D playerTexture;
 };

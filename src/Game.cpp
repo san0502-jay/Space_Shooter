@@ -266,7 +266,7 @@ void Game::Draw() {
 
 void Game::Reset()
 {
-    player = Player();
+    player.Reset();
 
     bullets.clear();
 

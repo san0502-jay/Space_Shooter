@@ -13,7 +13,7 @@ class Enemy {
 
     bool active;
 
-    Texture2D* enmeytexture;
+    Texture2D* enmeyTexture;
 
     Rectangle GetRect();
 

@@ -10,7 +10,7 @@ Enemy::Enemy(Vector2 startPosition, Texture2D* texture) {
 
     active = true;
 
-    enmeytexture = texture;
+    enmeyTexture = texture;
 
 
 }
@@ -31,8 +31,8 @@ void Enemy::Draw() {
     {
         0,
         0,
-        (float)enmeytexture->width,
-        (float)enmeytexture->height
+        (float)enmeyTexture->width,
+        (float)enmeyTexture->height
     };
 
     Rectangle destination =
@@ -50,7 +50,7 @@ void Enemy::Draw() {
     };
 
     DrawTexturePro(
-        *enmeytexture,
+        *enmeyTexture,
         source,
         destination,
         origin,

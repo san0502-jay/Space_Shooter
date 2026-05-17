@@ -13,6 +13,8 @@ Player::Player() {
 
 }
 
+Player::~Player() { UnloadTexture(playerTexture); }
+
 void Player::Update() {
 
     float deltatime = GetFrameTime();
@@ -91,5 +93,13 @@ Rectangle Player::GetRect()
         51
     };
 
+}
+
+void Player::Reset() {
+    position ={400,500};
+
+    speed = 300.0f;
+
+    radius = 45.0f;
 }
 
